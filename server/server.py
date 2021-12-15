@@ -17,20 +17,27 @@ def main():
         client, addr = server.accept()
         clients.append(client)
 
+        thread = threading.Thread(target=messagesTreatment, args=[client])
+        thread.start()
+
 def messagesTreatment(client):
     while True:
         try:
-            messages = client.recv(1024)
+            msg = client.recv(2048)
+            broadcast(msg, client)
         except:
-            pass
+            deleteClient(client)
+            break
 
-def broadcast(messages, client):
+def broadcast(msg, client):
     for clientItem in clients:
         if clientItem != client:
             try:
-                clientItem.send(messages)
+                clientItem.send(msg)
             except:
                 deleteClient(clientItem)
 
 def deleteClient(client):
-    client.remove(client)
+    clients.remove(client)
+
+main()

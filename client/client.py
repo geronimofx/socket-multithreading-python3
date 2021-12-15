@@ -28,8 +28,8 @@ def main():
 def receiveMessages(client):
     while True:
         try:
-            messages = client.recv(1024).decode('utf-8')
-            print (messages+'\n')
+            msg = client.recv(2048).decode('utf-8')
+            print (msg+'\n')
         except:
             print ('\nNão foi possível permanecer conectado ao servidor')
             print ("Pressione <ENTER> para continuar...")
@@ -39,7 +39,9 @@ def receiveMessages(client):
 def sendMessages(client, username):
     while True:
         try:
-            messages = input('\n')
-            client.send('f<{username}> {messages}'.encode('utf-8'))
+            msg = input('\n')
+            client.send(f'<{username}> {msg}'.encode('utf-8'))
         except:
-            return 
+            return
+
+main()
